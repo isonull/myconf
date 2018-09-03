@@ -1,3 +1,6 @@
 [submodule ".zprezto"]
 	path = .zprezto
 	url = git@github.com:yanzijun922/prezto.git
+[submodule ".tmux"]
+	path = .tmux
+	url = git@github.com:yanzijun922/.tmux.git
