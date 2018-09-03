@@ -87,7 +87,7 @@ let g:formatter_yapf_style = 'pep8'
 let g:airline#extensions#tabline#enabled = 1
 
 " indentLine settings
-let g:indentLine_conceallevel = 2
+let g:indentLine_conceallevel = 0
 
 " snippets settings
 " make YCM compatible with UltiSnips (using supertab)
@@ -197,8 +197,8 @@ set splitright
 " tabe
 nnoremap <S-Left> gT
 nnoremap <S-Right> gt
-nnoremap <silent> <esc>[1;9D :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
-nnoremap <silent> <esc>[1;9C :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
+nnoremap <silent> <M-left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
+nnoremap <silent> <M-right> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
 nnoremap <silent> <leader>t :tabnew<CR>
 
 " buffer
@@ -220,5 +220,24 @@ iabbrev @@ yanzijun@me.com
 set dictionary=/usr/share/dict/words
 
 " conceal setting
-set conceallevel=2
+set conceallevel=0
 let g:tex_conceal="abgm"
+
+if &term =~ '^screen'
+    " tmux will send xterm-style keys when its xterm-keys option is on
+    execute "set <xUp>=\e[1;*A"
+    execute "set <xDown>=\e[1;*B"
+    execute "set <xRight>=\e[1;*C"
+    execute "set <xLeft>=\e[1;*D"
+    map <esc>[1;3A <M-up>
+    map <esc>[1;3B <M-down>
+    map <esc>[1;3C <M-right>
+    map <esc>[1;3D <M-Left>
+endif
+
+if &term =~ '^xterm'
+    map <esc>[1;9A <M-up>
+    map <esc>[1;9B <M-down>
+    map <esc>[1;9C <M-right>
+    map <esc>[1;9D <M-Left>
+endif
