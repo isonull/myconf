@@ -32,9 +32,9 @@ Plugin 'https://github.com/luochen1990/rainbow.git'
 Plugin 'https://github.com/nathanaelkane/vim-indent-guides.git'
 Plugin 'https://github.com/sjl/gundo.vim.git' " vim undo tree
 Plugin 'https://github.com/mileszs/ack.vim.git' " vim grep
-Plugin 'https://github.com/python-mode/python-mode.git'
 Plugin 'https://github.com/plasticboy/vim-markdown.git'
 Plugin 'https://github.com/vimwiki/vimwiki.git'
+Plugin 'https://github.com/jez/vim-better-sml.git'
 
 call vundle#end()            " required
 
@@ -48,13 +48,12 @@ let g:vimwiki_ext2syntax = {'.md': 'markdown',
             \ '.mkd': 'markdown',
             \ '.wiki': 'media'}
 let g:vimwiki_global_ext = 0
-autocmd BufEnter,BufRead,BufNewFile *.md set filetype=markdown
 
 " rainbow settings
 let g:rainbow_active = 1
 
 " YCM settings
-let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
 let g:ycm_python_binary_path = 'python3'
 
 " vimtex settings
@@ -74,9 +73,10 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-
 let b:syntastic_mode = 'passive'
-
+let g:syntastic_mode_map = {
+    \ "mode": "passive",
+    \ "passive_filetypes": ["tex"] }
 nnoremap <Leader>sc :SyntasticCheck<CR>
 nnoremap <Leader>sr :SyntasticReset<CR>
 
@@ -87,7 +87,7 @@ let g:formatter_yapf_style = 'pep8'
 let g:airline#extensions#tabline#enabled = 1
 
 " indentLine settings
-let g:indentLine_conceallevel = 0
+let g:indentLine_conceallevel = 2
 
 " snippets settings
 " make YCM compatible with UltiSnips (using supertab)
@@ -99,6 +99,11 @@ let g:SuperTabDefaultCompletionType = '<C-n>'
 let g:UltiSnipsExpandTrigger = "<tab>"
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+
+" Gundo python3 support
+if has('python3')
+    let g:gundo_prefer_python3 = 1
+endif
 
 " vim pandoc settings
 " let g:pandoc#syntax#conceal#use = 0
@@ -148,6 +153,7 @@ set smarttab
 set tabstop=4
 set shiftwidth=4
 
+autocmd FileType text setlocal tabstop=2 shiftwidth=2 softtabstop=2 textwidth=120
 autocmd FileType php setlocal tabstop=2 shiftwidth=2 softtabstop=2 textwidth=120
 autocmd FileType ruby setlocal tabstop=2 shiftwidth=2 softtabstop=2 textwidth=120
 autocmd FileType php setlocal tabstop=4 shiftwidth=4 softtabstop=4 textwidth=120
@@ -155,7 +161,10 @@ autocmd FileType coffee,javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2
 autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4 textwidth=120
 autocmd FileType html,htmldjango,xhtml,haml setlocal tabstop=2 shiftwidth=2 softtabstop=2 textwidth=0
 autocmd FileType sass,scss,css setlocal tabstop=2 shiftwidth=2 softtabstop=2 textwidth=120
-
+autocmd filetype xml setlocal tabstop=2 shiftwidth=2 softtabstop=2 textwidth=120
+autocmd filetype markdown,vimwiki,pandoc setlocal tabstop=4 shiftwidth=4 softtabstop=4 textwidth=120
+autocmd filetype tex let g:ycm_seed_identifiers_with_syntax = 1
+autocmd filetype tex let g:ycm_max_num_identifier_candidates = 1
 " line display
 set linebreak
 set textwidth=500
@@ -220,8 +229,8 @@ iabbrev @@ yanzijun@me.com
 set dictionary=/usr/share/dict/words
 
 " conceal setting
-set conceallevel=0
-let g:tex_conceal="abgm"
+set conceallevel=2
+let g:tex_conceal=""
 
 if &term =~ '^screen'
     " tmux will send xterm-style keys when its xterm-keys option is on
@@ -241,3 +250,6 @@ if &term =~ '^xterm'
     map <esc>[1;9C <M-right>
     map <esc>[1;9D <M-Left>
 endif
+
+"Remove all trailing whitespace by pressing F5
+nnoremap <F9> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
